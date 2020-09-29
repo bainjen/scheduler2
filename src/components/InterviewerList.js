@@ -10,12 +10,11 @@ export default function InterviewerList(props) {
   // });
 
   return (
-    <InterviewerList>
-    {/* //   className={buttonClass}
-    //   onClick={props.onClick}
-    //   disabled={props.disabled}
-    // >
-    //   {props.children} */}
-    </InterviewerList>
+
+    <section className="interviewers">
+      <h4 className="interviewers__header text--light">Interviewer</h4>
+      <ul className="interviewers__list"></ul>
+    </section>
+
   );
 }
