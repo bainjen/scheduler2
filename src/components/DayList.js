@@ -14,7 +14,7 @@ export default function DayList(props) {
 
     )
   })
-  console.log(dayListItems); 
+  // console.log(dayListItems); 
   return (
     <ul>
       {dayListItems}
