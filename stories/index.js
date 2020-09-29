@@ -18,6 +18,10 @@ import InterviewerList from "components/InterviewerList";
 
 import Appointment from "components/Appointment/index";
 
+import Header from "components/Appointment/Header";
+
+import Empty from "components/Appointment/Empty";
+
 //testing Button component
 storiesOf("Button", module)
   .addParameters({
@@ -145,4 +149,6 @@ storiesOf("Appointment", module)
     backgrounds: [{ name: "white", value: "#fff", default: true }]
   })
   .add("Appointment", () => <Appointment />)
-  .add("Appointment with Time", () => <Appointment time="12pm" />);
+  .add("Appointment with Time", () => <Appointment time="12pm" />)
+  .add("Header", () => <Header time="12pm" />)
+  .add("Empty", () => <Empty onAdd={action("onAdd")}/>)
