@@ -3,16 +3,24 @@ import Button from "../Button";
 import InterviewerList from "../InterviewerList";
 
 export default function Form(props) {
-  const [interviewer, setInterviewer] = useState(3);
-  const [name, setName] = useState("");
 
-  // const setInterviewer = () => console.log('hello')
-  // const placeholderVal = props.name ? props.name : "Enter Student Name"
+  const [name, setName] = useState(props.interviewer || "");
+  const [interviewer, setInterviewer] = useState(props.name || null);
+
+  const reset = () => {
+    setName("");
+    setInterviewer(null); 
+  }
+
+  const cancel = () => {
+    reset();
+    props.onCancel();
+  }
 
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form autoComplete="off">
+        <form onSubmit={event => event.preventDefault()} autoComplete="off">
           <input
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -20,17 +28,14 @@ export default function Form(props) {
             name="name"
             type="text"
             placeholder="Enter student name"
-          /*
-            This must be a controlled component
-          */
           />
         </form>
         <InterviewerList interviewers={props.interviewers} interviewer={interviewer} setInterviewer={setInterviewer} />
       </section>
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button onClick={props.onCancel} danger>Cancel</Button>
-          <Button onClick={props.onSave} confirm>Save</Button>
+          <Button onClick={cancel} danger>Cancel</Button>
+          <Button onClick={() => props.onSave(name, interviewer)} confirm>Save</Button>
         </section>
       </section>
     </main>
