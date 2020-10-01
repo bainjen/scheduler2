@@ -1,37 +1,6 @@
-//We are going to create a function called getAppointmentsForDay that will receive two arguments state and day. The function will return an array of appointments for the given day.
-
-const state = {
-  days: [
-    {
-      id: 1,
-      name: "Monday",
-      appointments: [1, 2, 3]
-    },
-    {
-      id: 2,
-      name: "Tuesday",
-      appointments: [4, 5]
-    }
-  ],
-  appointments: {
-    "1": { id: 1, time: "12pm", interview: null },
-    "2": { id: 2, time: "1pm", interview: null },
-    "3": {
-      id: 3,
-      time: "2pm",
-      interview: { student: "Archie Cohen", interviewer: 2 }
-    },
-    "4": { id: 4, time: "3pm", interview: null },
-    "5": {
-      id: 5,
-      time: "4pm",
-      interview: { student: "Chad Takahashi", interviewer: 2 }
-    }
-  }
-};
+// function returns an array of appointments for given day.
 
 export function getAppointmentsForDay(state, day) {
-  //... returns an array of appointments for that day
   if (state.days.length === 0) return []; 
   
   const selectedDay = state.days.filter((d) => {
@@ -49,3 +18,31 @@ export function getAppointmentsForDay(state, day) {
   return resultsArray
 }
 
+// function returns new object containing interview data from the interviewer object (returns null without interviewer)
+
+export function getInterview(state, interview) {
+
+  if (!interview) return null; 
+//get interviwers using state.interviewers
+  const interviewers = state.interviewers;
+
+//get value of interviewer from interview 
+  const interviewerId = interview.interviewer;
+ 
+//get single interviewer object from interviewrs
+  const singleInterviewer = interviewers[interviewerId]; 
+
+  const finalObject = { ...interview, interviewer: singleInterviewer };
+
+  return finalObject; 
+}
+
+//returned object looks like this: 
+// {  
+//   "student": "Lydia Miller-Jones",
+//   "interviewer": {  
+//     "id": 1,
+//     "name": "Sylvia Palmer",
+//     "avatar": "https://i.imgur.com/LpaY82x.png"
+//   }
+// }
