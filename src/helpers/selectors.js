@@ -1,10 +1,10 @@
 // function returns an array of appointments for given day.
 
 export function getAppointmentsForDay(state, day) {
-  if (state.days.length === 0) return []; 
-  
+  if (state.days.length === 0) return [];
+
   const selectedDay = state.days.filter((d) => {
-    return d.name === day 
+    return d.name === day
   })
 
   if (selectedDay.length === 0) return [];
@@ -12,9 +12,9 @@ export function getAppointmentsForDay(state, day) {
   const apptIds = selectedDay[0].appointments;
 
   const resultsArray = apptIds.map(elem => {
-    return state.appointments[elem]; 
+    return state.appointments[elem];
   })
-  
+
   return resultsArray
 }
 
@@ -22,19 +22,21 @@ export function getAppointmentsForDay(state, day) {
 
 export function getInterview(state, interview) {
 
-  if (!interview) return null; 
-//get interviwers using state.interviewers
+  if (!interview) return null;
+
+  //get interviewers using state.interviewers
   const interviewers = state.interviewers;
 
-//get value of interviewer from interview 
+  //get value of interviewer from interview 
   const interviewerId = interview.interviewer;
- 
-//get single interviewer object from interviewrs
-  const singleInterviewer = interviewers[interviewerId]; 
 
+  //get single interviewer object from interviewrs
+  const singleInterviewer = interviewers[interviewerId];
+
+  //combine two objects in a new object 
   const finalObject = { ...interview, interviewer: singleInterviewer };
 
-  return finalObject; 
+  return finalObject;
 }
 
 //returned object looks like this: 
