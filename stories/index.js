@@ -190,7 +190,6 @@ storiesOf("Appointment", module)
       interviewers={interviewers}
       onSave={action("onSave")}
       onCancel={action("onCancel")}
-      notUsedProp={"I'm never"}
     />
   ))
   .add("Edit Form", () => (
