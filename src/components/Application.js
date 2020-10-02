@@ -5,6 +5,7 @@ import DayList from "components/DayList";
 import "components/Application.scss";
 import Appointment from "components/Appointment"
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
+import { actions } from "@storybook/addon-actions";
 
 export default function Application(props) {
 
@@ -18,9 +19,7 @@ export default function Application(props) {
   const setDay = (day) => setState({ ...state, day });
 
 
-  function bookInterview(id, interview) {
-    // console.log('this is the id', id);
-    // console.log('this is the interview', interview);
+  const bookInterview = (id, interview) => {
 
     const appointment = {
       ...state.appointments[id],
@@ -31,8 +30,7 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-
-    // console.log('this is appointment', appointment)
+    //edit interview data
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {
       interview: appointment.interview
     })
@@ -45,6 +43,28 @@ export default function Application(props) {
       .catch(e => console.error(e))
   };
 
+  const cancelInterview = (id) => {
+    //set the appointment interview to null, leaving other key/values alone
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+      .then(resp => {
+
+        setState({
+          ...state,
+          appointments
+        })
+      })
+      .catch(e => console.error(e));
+  }
 
   useEffect(() => {
     Promise.all([
@@ -77,6 +97,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={dailyInterviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
   });
