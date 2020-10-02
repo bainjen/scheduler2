@@ -48,3 +48,28 @@ export function getInterview(state, interview) {
 //     "avatar": "https://i.imgur.com/LpaY82x.png"
 //   }
 // }
+
+// function returns an array of interviewers for given day.
+export function getInterviewersForDay(state, day) {
+  if (state.days.length === 0) return [];
+
+  const selectedDay = state.days.filter((d) => {
+    return d.name === day
+  })
+
+  if (selectedDay.length === 0) return [];
+
+  const interviewerIds = selectedDay[0].interviewers;
+
+  const resultsArray = interviewerIds.map(elem => {
+    return state.interviewers[elem];
+  })
+
+  return resultsArray
+}
+
+//returned array looks like this: 
+// [
+//   { id: 1, name: "Sylvia Palmer", avatar: "https://i.imgur.com/LpaY82x.png" },
+//   { id: 2, name: "Samantha Stanic", avatar: "https://i.imgur.com/okB9WKC.jpg" }
+// ]
