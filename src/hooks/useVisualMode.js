@@ -23,6 +23,7 @@ export default function useVisualMode(initial) {
     }
   }
 
-  return { mode, transition, back, };
+  return { mode, transition, back };
 }
 
+//function tracks the mode of appointments as a stateful variable. Modes are empty -- show == create/edit -- saving/deleting -- confirm
