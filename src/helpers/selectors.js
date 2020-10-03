@@ -1,5 +1,5 @@
+//+++++++FUNCTIONS USED IN USEVISUALMODE HOOK+++++++++++++
 // function returns an array of appointments for given day.
-
 export function getAppointmentsForDay(state, day) {
   if (state.days.length === 0) return [];
 
@@ -39,16 +39,6 @@ export function getInterview(state, interview) {
   return finalObject;
 }
 
-//returned object looks like this: 
-// {  
-//   "student": "Lydia Miller-Jones",
-//   "interviewer": {  
-//     "id": 1,
-//     "name": "Sylvia Palmer",
-//     "avatar": "https://i.imgur.com/LpaY82x.png"
-//   }
-// }
-
 // function returns an array of interviewers for given day.
 export function getInterviewersForDay(state, day) {
   if (state.days.length === 0) return [];
@@ -68,8 +58,55 @@ export function getInterviewersForDay(state, day) {
   return resultsArray
 }
 
-//returned array looks like this: 
-// [
-//   { id: 1, name: "Sylvia Palmer", avatar: "https://i.imgur.com/LpaY82x.png" },
-//   { id: 2, name: "Samantha Stanic", avatar: "https://i.imgur.com/okB9WKC.jpg" }
-// ]
+//+++++++FUNCTIONS USED IN USEAPPLICATIONDATA HOOK++++++++
+const calculateSpotsRemaining = (state, appointments) => {
+
+  //this returns an array of the ids for all appointments in a day [1, 2, 3, 4, 5]
+  let dayAppointment = {}
+  state.days.forEach((d, i) => {
+    const { id, appointments } = d;
+    dayAppointment[id] = [...appointments]
+  })
+
+  let dayLength = {}
+  for (const [key, arr] of Object.entries(dayAppointment)) {
+    let count = 0;
+    arr.forEach(v => {
+      if (appointments[v].interview) {
+        count++;
+      }
+      dayLength[key] = arr.length - count;
+    })
+
+  }
+  //dayLength returns an object where the key is the day's id and the value is the number of null (empty/avilable) appointments 
+
+  return dayLength;
+}
+
+//looking inside of each day to see whether the appt id is included in the array of appointments for each day. If the appt belongs to a certain day, return the day id. 
+const findDayIdFromAppointmentId = (state, apptId) => {
+  let dayId;
+  state.days.forEach(d => {
+    const { id, appointments } = d;
+    if (appointments.includes(apptId)) {
+      dayId = id;
+    }
+  })
+  return dayId;
+}
+
+//returns a day object with the updates spots value
+export const mutateDaysAtSingleDay = (state, apptId, appointments) => {
+  const dayId = findDayIdFromAppointmentId(state, apptId);
+  const spotsRemaining = calculateSpotsRemaining(state, appointments);
+  const updatedSpot = spotsRemaining[dayId];
+  const days = [...state.days]
+  const updatedDays = days.map(d => {
+    if (d.id === dayId) {
+      d = { ...d, spots: updatedSpot }
+    }
+    return d;
+  })
+  return updatedDays;
+}
