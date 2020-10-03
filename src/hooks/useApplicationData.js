@@ -29,6 +29,24 @@ const calculateSpotsRemaining = (state) => {
   return dayLength;
 }
 
+//looking inside of each day to see whether the appt id is included in the array of appointments for each day. If the appt belongs to a certain day, return the day id. 
+const findDayIdFromAppointmentId = (state, apptId) => {
+  let dayId; 
+  state.days.forEach(d => {
+    const { id, appointments } = d; 
+    if (appointments.includes(apptId)) {
+      dayId = id;
+    } 
+  })
+  return dayId; 
+}
+
+
+const mutateDaysAtSingleDay = (state, dayId, newVal) => {
+  
+}
+
+
 
 
 export default function useApplicationData() {
@@ -49,7 +67,7 @@ export default function useApplicationData() {
       //Need days[arrayvalue].id === output of above function (object still)
       //take above result and update spots
       //pass it through other functions to update useState
-
+console.log('we are lookig here', findDayIdFromAppointmentId(state, id))
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
