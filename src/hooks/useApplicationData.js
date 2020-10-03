@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-const calculateSpotsRemaining = (state) => {
+const calculateSpotsRemaining = (state, appointments) => {
 
   //this returns an array of the ids for all appointments in a day [1, 2, 3, 4, 5]
   let dayAppointment = {}
@@ -11,10 +11,12 @@ const calculateSpotsRemaining = (state) => {
     dayAppointment[id] = [...appointments]
   })
 
-    //need to map returned array from above to State.appointments[id].interview is null?
+  //need to map returned array from above to State.appointments[id].interview is null?
   let dayLength = {}
   for (const [key, arr] of Object.entries(dayAppointment)) {
-    const { appointments } = state; 
+    // const { appointments } = state;
+    console.log('appointments: ', appointments)
+    // console.log('appts: ', appts);
     let count = 0;
     arr.forEach(v => {
       if (appointments[v].interview) {
@@ -25,25 +27,37 @@ const calculateSpotsRemaining = (state) => {
 
   }
   //dayLength returns an object where the key is the day's id and the value is the number of null (empty/avilable) appointments 
-  
+
   return dayLength;
 }
 
 //looking inside of each day to see whether the appt id is included in the array of appointments for each day. If the appt belongs to a certain day, return the day id. 
 const findDayIdFromAppointmentId = (state, apptId) => {
-  let dayId; 
+  let dayId;
   state.days.forEach(d => {
-    const { id, appointments } = d; 
+    const { id, appointments } = d;
     if (appointments.includes(apptId)) {
       dayId = id;
-    } 
+    }
   })
-  return dayId; 
+  return dayId;
 }
 
-
-const mutateDaysAtSingleDay = (state, dayId, newVal) => {
-  
+//returns a day object with the updates spots value
+const mutateDaysAtSingleDay = (state, apptId, appointments) => {
+  console.log('appointments from mutate: ', appointments);
+  // const operation = add ? 1 : -1
+  const dayId = findDayIdFromAppointmentId(state, apptId);
+  const spotsRemaining = calculateSpotsRemaining(state, appointments);
+  const updatedSpot = spotsRemaining[dayId];
+  const days = [...state.days]
+  const updatedDays = days.map(d => {
+    if (d.id === dayId) {
+      d = { ...d, spots: updatedSpot }
+    }
+    return d;
+  })
+  return updatedDays;
 }
 
 
@@ -63,11 +77,11 @@ export default function useApplicationData() {
 
   const bookInterview = (id, interview) => {
 
-      //need a function that takes in the appointment id and returns the day id.
-      //Need days[arrayvalue].id === output of above function (object still)
-      //take above result and update spots
-      //pass it through other functions to update useState
-console.log('we are lookig here', findDayIdFromAppointmentId(state, id))
+    //need a function that takes in the appointment id and returns the day id.
+    //Need days[arrayvalue].id === output of above function (object still)
+    //take above result and update spots
+    //pass it through other functions to update useState
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -77,6 +91,9 @@ console.log('we are lookig here', findDayIdFromAppointmentId(state, id))
       ...state.appointments,
       [id]: appointment
     };
+    const days = mutateDaysAtSingleDay(state, id, appointments);
+
+
     //edit interview data
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {
       interview: appointment.interview
@@ -84,9 +101,11 @@ console.log('we are lookig here', findDayIdFromAppointmentId(state, id))
       .then(resp => {
         setState({
           ...state,
-          appointments
+          appointments,
+          days
         })
       })
+
     // .catch(e => console.error(e))
   };
 
@@ -101,18 +120,19 @@ console.log('we are lookig here', findDayIdFromAppointmentId(state, id))
       ...state.appointments,
       [id]: appointment
     };
+    const days = mutateDaysAtSingleDay(state, id, appointments);
 
     return axios.delete(`http://localhost:8001/api/appointments/${id}`)
       .then(resp => {
 
         setState({
           ...state,
-          appointments
+          appointments,
+          days
         })
       })
     // .catch(e => console.error(e));
   }
-  console.log(calculateSpotsRemaining(state))
   useEffect(() => {
     Promise.all([
       axios.get('http://localhost:8001/api/days'),
@@ -129,7 +149,7 @@ console.log('we are lookig here', findDayIdFromAppointmentId(state, id))
     })
   }, [])
 
-  return {state, setDay, bookInterview, cancelInterview}
+  return { state, setDay, bookInterview, cancelInterview }
 
 }
 
