@@ -46,9 +46,9 @@ export default function Appointment(props) {
       .catch(error => transition(ERROR_DELETE, true));
 
   }
-  console.log(`props.interview here`, props.interview)
+  // console.log(`props.interview here`, props.interview)
 
-  console.log('interviewrs are', props.interviewers)
+  // console.log('interviewrs are', props.interviewers)
 
   return (
     <article className="appointment">

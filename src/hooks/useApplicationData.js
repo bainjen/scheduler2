@@ -1,6 +1,36 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
+const calculateSpotsRemaining = (state) => {
+
+  //this returns an array of the ids for all appointments in a day [1, 2, 3, 4, 5]
+  let dayAppointment = {}
+  state.days.forEach((d, i) => {
+    const { id, appointments } = d;
+    dayAppointment[id] = [...appointments]
+  })
+
+    //need to map returned array from above to State.appointments[id].interview is null?
+  let dayLength = {}
+  for (const [key, arr] of Object.entries(dayAppointment)) {
+    const { appointments } = state; 
+    let count = 0;
+    arr.forEach(v => {
+      if (appointments[v].interview) {
+        count++;
+      }
+      dayLength[key] = arr.length - count;
+    })
+
+  }
+  //dayLength returns an object where the key is the day's id and the value is the number of null (empty/avilable) appointments 
+  
+  return dayLength;
+}
+
+
+
 export default function useApplicationData() {
 
   const [state, setState] = useState({
@@ -14,6 +44,11 @@ export default function useApplicationData() {
 
 
   const bookInterview = (id, interview) => {
+
+      //need a function that takes in the appointment id and returns the day id.
+      //Need days[arrayvalue].id === output of above function (object still)
+      //take above result and update spots
+      //pass it through other functions to update useState
 
     const appointment = {
       ...state.appointments[id],
@@ -59,7 +94,7 @@ export default function useApplicationData() {
       })
     // .catch(e => console.error(e));
   }
-
+  console.log(calculateSpotsRemaining(state))
   useEffect(() => {
     Promise.all([
       axios.get('http://localhost:8001/api/days'),
@@ -79,6 +114,8 @@ export default function useApplicationData() {
   return {state, setDay, bookInterview, cancelInterview}
 
 }
+
+//Our goal is to improve the maintainability of the code by separating the rendering concern from the state management concern in our application.
 
 //This was removed from Application.js and made into a custom hook that is now used withing Application.js
 
