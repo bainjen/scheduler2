@@ -26,7 +26,7 @@ export default function useApplicationData() {
     const days = mutateDaysAtSingleDay(state, id, appointments);
 
     //edit interview data
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, {
+    return axios.put(`/api/appointments/${id}`, {
       interview: appointment.interview
     })
       .then(resp => {
@@ -51,7 +51,7 @@ export default function useApplicationData() {
     };
     const days = mutateDaysAtSingleDay(state, id, appointments);
 
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+    return axios.delete(`/api/appointments/${id}`)
       .then(resp => {
 
         setState({
@@ -63,9 +63,9 @@ export default function useApplicationData() {
   }
   useEffect(() => {
     Promise.all([
-      axios.get('http://localhost:8001/api/days'),
-      axios.get('http://localhost:8001/api/appointments'),
-      axios.get('http://localhost:8001/api/interviewers')
+      axios.get('/api/days'),
+      axios.get('/api/appointments'),
+      axios.get('/api/interviewers')
     ]).then((all) => {
 
       const days = all[0].data;
