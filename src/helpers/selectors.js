@@ -60,7 +60,6 @@ export function getInterviewersForDay(state, day) {
 
 //+++++++FUNCTIONS USED IN USEAPPLICATIONDATA HOOK++++++++
 const calculateSpotsRemaining = (state, appointments) => {
-
   //this returns an array of the ids for all appointments in a day [1, 2, 3, 4, 5]
   let dayAppointment = {}
   state.days.forEach((d, i) => {
@@ -80,7 +79,6 @@ const calculateSpotsRemaining = (state, appointments) => {
 
   }
   //dayLength returns an object where the key is the day's id and the value is the number of null (empty/avilable) appointments 
-
   return dayLength;
 }
 

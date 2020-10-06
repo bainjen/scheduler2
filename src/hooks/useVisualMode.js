@@ -10,7 +10,8 @@ export default function useVisualMode(initial) {
     if (replace) { //if replace is true, change mode, don't add to history so that back calls the last time replace was not true.
       setMode(newMode);
     } else {
-      setMode(newMode) //use spread because you want to copy everything that already exists in history AND newMode
+      setMode(newMode)
+      //use spread because you want to copy everything that already exists in history AND newMode
       setHistory(prev => [...prev, newMode])
     }
   }
@@ -25,5 +26,4 @@ export default function useVisualMode(initial) {
 
   return { mode, transition, back };
 }
-
-//function tracks the mode of appointments as a stateful variable. Modes are empty -- show == create/edit -- saving/deleting -- confirm
+//function tracks the mode of appointments as a stateful variable. Modes are: empty -- show -- create/edit -- saving/deleting -- confirm

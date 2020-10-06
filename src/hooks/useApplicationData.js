@@ -12,8 +12,6 @@ export default function useApplicationData() {
   });
 
   const setDay = (day) => setState({ ...state, day });
-
-
   const bookInterview = (id, interview) => {
 
     const appointment = {
@@ -26,7 +24,6 @@ export default function useApplicationData() {
       [id]: appointment
     };
     const days = mutateDaysAtSingleDay(state, id, appointments);
-
 
     //edit interview data
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {
@@ -80,7 +77,6 @@ export default function useApplicationData() {
   }, [])
 
   return { state, setDay, bookInterview, cancelInterview }
-
 }
 
 //Our goal is to improve the maintainability of the code by separating the rendering concern from the state management concern in our application.
