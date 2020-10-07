@@ -148,7 +148,7 @@ describe("Application", () => {
     fireEvent.click(getByAltText(booked, "Close"));
   });
 
-  it("shows the save error when failing to save an appointment", async () => {
+  it("shows the delete error when failing to delete an appointment", async () => {
     axios.delete.mockRejectedValueOnce();
 
     const { container } = render(<Application />);
