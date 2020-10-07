@@ -122,7 +122,7 @@ describe("Application", () => {
   it("shows the save error when failing to save an appointment", async () => {
     axios.put.mockRejectedValueOnce();
 
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -146,7 +146,6 @@ describe("Application", () => {
     await waitForElement(() => getByText(booked, "An error occurred on save"));
 
     fireEvent.click(getByAltText(booked, "Close"));
-    debug();
   });
 
   it("shows the save error when failing to save an appointment", async () => {
@@ -176,7 +175,6 @@ describe("Application", () => {
     );
 
     fireEvent.click(getByAltText(booked, "Close"));
-
   });
 });
 

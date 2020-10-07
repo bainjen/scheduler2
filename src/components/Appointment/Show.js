@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function Show(props) {
+  const name = props.interviewer ? props.interviewer.name : null;
 
   return (
     <main className="appointment__card appointment__card--show" data-testid="booked">
@@ -9,7 +10,7 @@ export default function Show(props) {
         <section className="interviewer">
           <h4 className="text--light">Interviewer</h4>
           {/* {props.interviewer && <h3 className="text--regular">{props.interviewer.name}</h3>} */}
-          <h3 className="text--regular">{props.interviewer.name}</h3>
+          <h3 className="text--regular">{name}</h3>
         </section>
       </section>
       <section className="appointment__card-right">
