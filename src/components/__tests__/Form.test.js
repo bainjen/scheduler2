@@ -92,9 +92,3 @@ describe("Form", () => {
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });
-
-//We have improved the test by making it resemble the way we use our software. Instead of initializing the component with a default value, we simulate user interaction. This test is more accurate, and as a bonus, we are getting better test coverage.
-
-//   When we use getByText we should be confident that the element exists. If it does not exist, then it throws an error instead. We can test for the absence of something by using queryByText and checking that the value is null.
-// It is a case insensitive regular expression. This search is more general than the absolute string "Student name cannot be blank".
-// The onSave reference is a mock function that we can pass to the Form component.

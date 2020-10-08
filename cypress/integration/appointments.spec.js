@@ -1,10 +1,4 @@
-// appointment
-// Enters their name
-// Chooses an interviewer
-// Clicks the save button
-// Sees the booked appointment
-// Editing
-// If we edit the existing appointment booked for "Archie Cohen", then we don't need to create an appointment first.
+//cypress tests mimic user actions through use of app
 
 describe("Appointments", () => {
   beforeEach("should visit root", () => {
@@ -24,28 +18,20 @@ describe("Appointments", () => {
 
   it("should edit an interview", () => {
     cy.get("[alt=Edit]").first().click({ force: true });
-    cy.get("[data-testid=student-name-input]").clear().type("Lydia Miller-Jones");
+    cy.get("[data-testid=student-name-input]")
+      .clear()
+      .type("Lydia Miller-Jones");
     cy.get("[alt='Tori Malcolm']").click();
     cy.contains("Save").click();
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Tori Malcolm");
-  })
+  });
 
   it("should cancel an interview", () => {
     cy.get("[alt=Delete]").first().click({ force: true });
-    cy.contains("Confirm").click(); 
-    cy.contains("deleting").should("exist"); 
+    cy.contains("Confirm").click();
+    cy.contains("deleting").should("exist");
     cy.contains("deleting").should("not.exist");
-    cy.contains(".appointment__card--show", "Archie Cohen")
-    .should("not.exist");
-    // cy.get("[data-testid=student-name-input]").clear().type("Lydia Miller-Jones");
-    // cy.get("[alt='Tori Malcolm']").click();
-    // cy.contains("Save").click();
-    // cy.contains(".appointment__card--show", "Lydia Miller-Jones");
-    // cy.contains(".appointment__card--show", "Tori Malcolm");
-  })
+    cy.contains(".appointment__card--show", "Archie Cohen").should("not.exist");
+  });
 });
-
-// cy.contains("[data-testid=day]", "Tuesday")
-//   .click()
-//   .should("have.class", "day-list__item--selected");

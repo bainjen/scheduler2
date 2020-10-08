@@ -1,91 +1,82 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { mutateDaysAtSingleDay } from "../helpers/selectors"
+import { useState, useEffect } from "react";
 
+import axios from "axios";
+
+import { mutateDaysAtSingleDay } from "../helpers/selectors";
+
+//custom hook will return an object with four keys.
 export default function useApplicationData() {
-
   const [state, setState] = useState({
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: {}
+    interviewers: {},
   });
 
+  //used to set the current day.
   const setDay = (day) => setState({ ...state, day });
-  const bookInterview = (id, interview) => {
 
+  //makes an HTTP request and updates the local state.
+  const bookInterview = (id, interview) => {
     const appointment = {
       ...state.appointments[id],
-      interview: { ...interview }
+      interview: { ...interview },
     };
 
     const appointments = {
       ...state.appointments,
-      [id]: appointment
+      [id]: appointment,
     };
     const days = mutateDaysAtSingleDay(state, id, appointments);
 
-    //edit interview data
-    return axios.put(`/api/appointments/${id}`, {
-      interview: appointment.interview
-    })
-      .then(resp => {
+    //called when user edits interview data
+    return axios
+      .put(`/api/appointments/${id}`, {
+        interview: appointment.interview,
+      })
+      .then((resp) => {
         setState({
           ...state,
           appointments,
-          days
-        })
-      })
+          days,
+        });
+      });
   };
-
+  //makes an HTTP request and updates the local state.
   const cancelInterview = (id) => {
     //set the appointment interview to null, leaving other key/values alone
     const appointment = {
       ...state.appointments[id],
-      interview: null
+      interview: null,
     };
 
     const appointments = {
       ...state.appointments,
-      [id]: appointment
+      [id]: appointment,
     };
     const days = mutateDaysAtSingleDay(state, id, appointments);
 
-    return axios.delete(`/api/appointments/${id}`)
-      .then(resp => {
-
-        setState({
-          ...state,
-          appointments,
-          days
-        })
-      })
-  }
+    //called when user deletes an interview
+    return axios.delete(`/api/appointments/${id}`).then((resp) => {
+      setState({
+        ...state,
+        appointments,
+        days,
+      });
+    });
+  };
   useEffect(() => {
     Promise.all([
-      axios.get('/api/days'),
-      axios.get('/api/appointments'),
-      axios.get('/api/interviewers')
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers"),
     ]).then((all) => {
-
       const days = all[0].data;
       const appointments = all[1].data;
       const interviewers = all[2].data;
-      setState(prev => ({ ...prev, days, appointments, interviewers }));
+      setState((prev) => ({ ...prev, days, appointments, interviewers }));
+    });
+  }, []);
 
-    })
-  }, [])
-
-  return { state, setDay, bookInterview, cancelInterview }
+  return { state, setDay, bookInterview, cancelInterview };
 }
-
-//Our goal is to improve the maintainability of the code by separating the rendering concern from the state management concern in our application.
-
-//This was removed from Application.js and made into a custom hook that is now used withing Application.js
-
-//Our useApplicationData Hook will return an object with four keys.
-
-// The state object will maintain the same structure.
-// The setDay action can be used to set the current day.
-// The bookInterview action makes an HTTP request and updates the local state.
-// The cancelInterview action makes an HTTP request and updates the local state.

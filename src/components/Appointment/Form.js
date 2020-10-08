@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+
 import Button from "../Button";
+
 import InterviewerList from "../InterviewerList";
 
 export default function Form(props) {
@@ -20,11 +22,15 @@ export default function Form(props) {
   const validate = () => {
     if (name === "") {
       setError("Student name cannot be blank");
-      return; 
+      return;
     }
-    setError(""); 
-    props.onSave(name, interviewer)
-  }
+    // if (interviewer === null) {
+    //   setError("Please select an interviewer");
+    //   return;
+    // }
+    setError("");
+    props.onSave(name, interviewer);
+  };
 
   return (
     <main className="appointment__card appointment__card--create">

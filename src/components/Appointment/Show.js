@@ -4,12 +4,14 @@ export default function Show(props) {
   const name = props.interviewer ? props.interviewer.name : null;
 
   return (
-    <main className="appointment__card appointment__card--show" data-testid="booked">
+    <main
+      className="appointment__card appointment__card--show"
+      data-testid="booked"
+    >
       <section className="appointment__card-left">
         <h2 className="text--regular">{props.student}</h2>
         <section className="interviewer">
           <h4 className="text--light">Interviewer</h4>
-          {/* {props.interviewer && <h3 className="text--regular">{props.interviewer.name}</h3>} */}
           <h3 className="text--regular">{name}</h3>
         </section>
       </section>
@@ -30,5 +32,5 @@ export default function Show(props) {
         </section>
       </section>
     </main>
-  )
+  );
 }
